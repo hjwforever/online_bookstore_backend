@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.online_bookstore_backend.repository.Shopping_CartDao">
+    <delete id="deleteBook">
+        delete from shopping_cart where user_id=#{user_id} and book_id in
+            <foreach collection="bookidlist" item="book_id" open="(" close=")" separator=",">
+                #{book_id}
+            </foreach>
+    </delete>
+    <update id="changeAmount">
+        update shopping_cart set amount=#{amount} where user_id=#{user_id} and book_id=#{book_id}
+    </update>
+    <select id="findBookAmount" resultType="int">
+        select amount from shopping_cart where user_id=#{user_id} and book_id=#{book_id}
+    </select>
+    <select id="findAllShoppingCard" parameterType="long" resultType="Shopping_Cart">
+        select * from shopping_cart where user_id=#{user_id}
+    </select>
+    <insert id="insertBook" parameterType="Shopping_Cart" useGeneratedKeys="true" keyProperty="cart_id">
+        insert into shopping_cart(user_id,book_id,amount) values (#{user_id},#{book_id},#{amount})
+    </insert>
+</mapper>

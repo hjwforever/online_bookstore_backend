@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.online_bookstore_backend.repository.User_AddressDao">
+    <select id="findByUserId" parameterType="long" resultType="User_Address">
+        select * from user_address where user_id= #{user_id}
+    </select>
+
+    <select id="findByAddrId" parameterType="long" resultType="User_Address">
+        select * from user_address where addr_id= #{addr_id}
+    </select>
+    <select id="checkDefaultByAddrId" parameterType="long" resultType="boolean">
+        select default_addr from user_address where addr_id= #{addr_id}
+    </select>
+
+    <update id="setDefaultByAddrId"  parameterType="long">
+        update user_address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="default_addr!=null">default_addr=1,</if>
+        </trim>
+        WHERE addr_id=#{addr_id}
+    </update>
+
+    <update id="serNotDefaultByUserId"  parameterType="long">
+        update user_address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="default_addr!=null">default_addr=0,</if>
+        </trim>
+        WHERE user_id=#{user_id}
+    </update>
+
+    <insert id="insert" parameterType="User_Address" useGeneratedKeys="true" keyProperty="addr_id" >
+        insert into user_address(user_id,phone,country,receiver_state,receiver_city,receiver_district,detail_address,zip_code,default_addr)
+        values (#{user_id},#{phone},#{country},#{receiver_state},#{receiver_city},#{receiver_district},#{detail_address},#{zip_code},#{default_addr})
+    </insert>
+    <update id="update"  parameterType="User_Address">
+        update user_address
+        <trim prefix="set" suffixOverrides=",">
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="zip_code!=null">zip_code=#{zip_code},</if>
+            <if test="country!=null">country=#{country},</if>
+            <if test="receiver_state!=null">receiver_state=#{receiver_state},</if>
+            <if test="receiver_city!=null">receiver_city=#{receiver_city},</if>
+            <if test="receiver_district!=null">receiver_district=#{receiver_district},</if>
+            <if test="detail_address!=null">detail_address=#{detail_address},</if>
+        </trim>
+        WHERE addr_id=#{addr_id}
+    </update>
+
+    <delete id="delete"  parameterType = "long">
+        delete from user_address where  addr_id= #{addr_id}
+    </delete>
+</mapper>

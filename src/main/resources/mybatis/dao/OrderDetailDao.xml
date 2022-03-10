@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.online_bookstore_backend.repository.Order_DetailDao">
+    <insert id="insert" parameterType="Order_Detail" useGeneratedKeys="true" keyProperty="order_detail_id" >
+        insert into order_detail(book_id,order_id,amount)
+        values (#{book_id},#{order_id},#{amount})
+    </insert>
+
+    <select id="findOrderIdByBookId" parameterType="long" resultType="long">
+        select order_id from order_detail where book_id = #{book_id}
+    </select>
+
+    <select id="findById" parameterType="long" resultType="Order_Detail">
+        select * from order_detail where order_detail_id = #{order_detail_id}
+    </select>
+
+    <select id="findByOrderId" parameterType="long" resultType="Order_Detail">
+        select * from order_detail where order_id = #{order_id}
+    </select>
+
+</mapper>

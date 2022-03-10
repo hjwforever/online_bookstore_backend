@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.online_bookstore_backend.repository.Book_CategoryDao">
+    <select id="findAll"  resultType="Book_Category">
+        select * from book_category
+    </select>
+    <select id="selectTopCategories" resultType="Book_Category">
+        select * from book_category where is_parent = 0 order by look_amount desc limit 0,#{topNum};
+    </select>
+    <select id="findByCateId" parameterType="Long" resultType="Book_Category">
+        select * from book_category where cate_id = #{cate_id}
+    </select>
+    <select id="findByParentId" parameterType="Long" resultType="Book_Category">
+        select * from book_category where parent_id = #{parent_id}
+    </select>
+    <update id="increaseCategoryLookAmount" parameterType="Long">
+        update book_category set look_amount = look_amount+1 where cate_id = #{cate_id}
+    </update>
+    <insert id="addbook_category" parameterType="Book_Category" useGeneratedKeys="true" keyProperty="cate_id">
+        insert into book_category(parent_id, catename, look_amount, is_parent) values (#{parent_id},#{catename},#{look_amount},#{is_parent})
+    </insert>
+    <select id="findAllCatename" resultType="String">
+        select catename from book_category
+    </select>
+
+    <select id="findAllLeafCategories" resultType="Book_Category">
+        select * from book_category where is_parent = 0;
+    </select>
+</mapper>

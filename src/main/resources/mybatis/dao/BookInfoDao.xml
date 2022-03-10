@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.online_bookstore_backend.repository.Book_InfoDao">
+    <select id="findBookInfo" parameterType="long" resultType="Book_Info">
+        select *
+        from book_info
+        where book_id = #{book_id}
+    </select>
+
+    <select id="findAllBookInfo" resultType="Book_Info">
+        select *
+        from book_info
+    </select>
+
+    <select id="fuzzyFindBookName" parameterType="String" resultType="long">
+        select book_id from book_info where  bookname REGEXP #{keyword}
+    </select>
+    <select id="selectBooksRandomly" parameterType="Integer" resultType="Book_Info">
+        select *
+        from book_info
+        order by rand() limit #{bookNum};
+    </select>
+    <select id="selectTopBooksByCategory" resultType="Book_Info">
+        select *
+        from book_info
+        where cate_id = #{cate_id}
+        order by look_amount desc limit 0,#{topNum};
+    </select>
+    <select id="complexQuery" resultType="Book_Info">
+        select * from book_info where 1=1
+        <if test="cateIdList != null and cateIdList.size() > 0 ">
+            and cate_id in
+            <foreach collection="cateIdList" item="item" open="(" close=")" separator=",">
+                ${item}
+            </foreach>
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and CONCAT(bookname,isbn,description,press,author) like CONCAT('%',#{keyword},'%')
+        </if>
+        <if test="lowPrice != null and lowPrice != -1">
+            and price &gt;= #{lowPrice}
+        </if>
+        <if test="highPrice != null and highPrice != -1">
+            and price &lt;= #{highPrice}
+        </if>
+    </select>
+
+    <select id="findByOrderDetailList" resultType="Book_Info">
+        select * from book_info where 1=1
+        <if test="orderDetailList != null and orderDetailList.size() > 0 ">
+            and book_id in
+            <foreach collection="orderDetailList" item="item" open="(" close=")" separator=",">
+                ${item.book_id}
+            </foreach>
+        </if>
+        <if test="orderDetailList == null or orderDetailList.size() == 0 ">
+            and 1=0
+        </if>
+    </select>
+
+    <update id="increaseLookAmount" parameterType="Long">
+        update book_info
+        set look_amount = look_amount + 1
+        where book_id = #{book_id}
+    </update>
+
+    <update id="increaseStoreAmount">
+        update book_info
+        set store_amount = store_amount + #{increaseNum}
+        where book_id = #{book_id}
+    </update>
+
+    <update id="decreaseStoreAmount">
+        update book_info
+        set store_amount = store_amount - #{decreaseNum}
+        where book_id = #{book_id}
+    </update>
+
+    <update id="changeStoreAmountToZero">
+        update book_info set store_amount=0 where book_id=#{book_id}
+    </update>
+
+    <insert id="insertBook" parameterType="Book_Info" useGeneratedKeys="true" keyProperty="book_id">
+        insert into book_info(cate_id,bookname,press,author,publish_date,
+                              isbn,price,pages,deal_amount,look_amount,
+                              store_amount,s_image,b_image,description,rate,rate_num)
+        values
+        (
+         #{cate_id},#{bookname},#{press},#{author},#{publish_date},#{isbn},
+         #{price},#{pages},#{deal_amount},#{look_amount},#{store_amount},
+         #{s_image},#{b_image},#{description},#{rate},#{rate_num}
+        )
+    </insert>
+
+    <select id="findIsbnList" resultType="String">
+        select isbn from book_info
+    </select>
+</mapper>

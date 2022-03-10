@@ -1,0 +1,54 @@
+server:
+  port: 8081
+mail:
+  address: xxx@chinamobile.com
+  receiver: xxx@126.com
+
+spring:
+  mail:
+    default-encoding: utf-8
+    host: smtp.qq.com #发送邮件服务器
+    username: 937617975@qq.com
+    password: fweingkjwzphbffd #客户端授权码
+    protocol: smtp
+    properties:
+      mail:
+        display:
+          sendmail: vevor.com
+          sendname: vevor
+        smtp:
+          auth: true
+          port: 465
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+            required: true
+
+
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mysql://139.9.114.11:3306/bookstore?serverTimezone=UTC
+    username: root
+    password: 123456
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+  mvc:
+    format:
+      date: yyyy-MM-dd
+mybatis:
+  type-aliases-package: com.springboot.online_bookstore_backend.domain
+  mapper-locations: classpath:mybatis/dao/*.xml
+#pagehelper分页插件配置
+pagehelper:
+  helper-dialect: mariadb
+  reasonable: true
+  support-methods-arguments: true
+
+# 自定义的属性和值
+myprops:
+  domainname: 192.168.0.110 # bookstore.makerhu.com #
+  port: 8081
+

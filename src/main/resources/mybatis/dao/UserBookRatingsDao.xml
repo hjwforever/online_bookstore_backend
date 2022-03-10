@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.springboot.online_bookstore_backend.repository.User_Book_RatingsDao">
+    <insert id="insert" parameterType="User_Book_Ratings" useGeneratedKeys="true" keyProperty="id" >
+        insert into user_book_ratings(user_id,book_id,rate,time)
+        values (#{user_id},#{book_id},#{rate},#{time})
+    </insert>
+</mapper>
